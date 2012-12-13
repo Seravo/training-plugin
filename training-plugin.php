@@ -59,9 +59,9 @@ add_role('trainings', 'Trainings', array(
 
 /* Make Trainings users see only their own Events in Admin */ 
 /* Doesn't work in Multisite? */
-/*
+
 function tm_posts_for_trainings_author($query) {
-if(current_user_can('trainings')){
+if(current_user_can_for_blog('trainings')){
 	if($query->is_admin) {
 		global $user_ID;
 		$query->set('author',  $user_ID);
@@ -73,13 +73,13 @@ if(current_user_can('trainings')){
 	}	
 }
 add_filter('pre_get_posts', 'tm_posts_for_trainings_author');
-*/
+
 
 /* Remove stuff from Trainings user's edit page */
  
 function tm_trainings_meta_boxes() {
 	if (is_admin()) {
-	if(current_user_can('trainings')) {
+	if(current_user_can_for_blog('trainings')) {
     	remove_meta_box('event-categoriesdiv', 'event', 'side');
 				}
 		}
@@ -90,7 +90,7 @@ add_action( 'admin_menu', 'tm_trainings_meta_boxes' );
 
 function tm_add_category_trainings($result, $EM_Event) {
 	if (is_admin()) {
-		if(current_user_can('trainings')){ 
+		if(current_user_can_for_blog('trainings')){ 
 			wp_set_object_terms($EM_Event->post_id, 'trainings', 'event-categories');
  		} 
 	}
