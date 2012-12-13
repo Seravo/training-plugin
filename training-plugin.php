@@ -26,10 +26,8 @@
 
 /* Requires the Events manager plugin */
 
-/* Add custom trainings category and custom trainings role */
+/* Add custom trainings role */
 
-function tm_trainings_init() {
-register_taxonomy('trainings', 'event-categories');
 add_role('trainings', 'Trainings', array(
 	'read' => true,
 	'edit_posts' => false,
@@ -55,12 +53,13 @@ add_role('trainings', 'Trainings', array(
  	'edit_event_categories' => false,
  	'manage_others_bookings' => false,
  	'manage_bookings' => true,
- 	'upload_event_images' => true 
+ 	'upload_event_images' => true
 ));
-}
-add_action('init', ' tm_trainings_init');
+
 
 /* Make Trainings users see only their own Events in Admin */ 
+/* Doesn't work in Multisite? */
+/*
 function tm_posts_for_trainings_author($query) {
 if(current_user_can('trainings')){
 	if($query->is_admin) {
@@ -74,6 +73,7 @@ if(current_user_can('trainings')){
 	}	
 }
 add_filter('pre_get_posts', 'tm_posts_for_trainings_author');
+*/
 
 /* Remove stuff from Trainings user's edit page */
  
