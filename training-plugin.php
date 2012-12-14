@@ -61,17 +61,20 @@ add_role('trainings', 'Trainings', array(
 /* Doesn't work in Multisite? */
 
 function tm_posts_for_trainings_author($query) {
-global $blog_id;
-if(current_user_can_for_blog($blog_id, 'trainings')){
-	if($query->is_admin) {
-		global $user_ID;
-		$query->set('author',  $user_ID);
+global $user_ID;
+global $current_user;
+$user_roles = $current_user->roles;
+$user_role = array_shift($user_roles);
+if($query->is_admin) {
+	if ($user_role == "trainings") {
+			global $user_ID;
+			$query->set('author', $user_ID);
 		echo '<style type="text/css">
-            	.subsubsub { display: none !important; }
-            	</style>';
-	}
+		.subsubsub { display: none !important; }
+		</style>';
+}
+}
 	return $query;	
-	}	
 }
 add_filter('pre_get_posts', 'tm_posts_for_trainings_author');
 
@@ -79,9 +82,12 @@ add_filter('pre_get_posts', 'tm_posts_for_trainings_author');
 /* Remove stuff from Trainings user's edit page */
  
 function tm_trainings_meta_boxes() {
+	global $current_user;
+	$user_roles = $current_user->roles;
+	$user_role = array_shift($user_roles);
 	global $blog_id;
 	if (is_admin()) {
-	if(current_user_can_for_blog($blog_id, 'trainings')) {
+	if($user_role == "trainings") {
     	remove_meta_box('event-categoriesdiv', 'event', 'side');
 				}
 		}
@@ -91,9 +97,11 @@ add_action( 'admin_menu', 'tm_trainings_meta_boxes' );
 /* Trainings users can only post Trainings category events */ 
 
 function tm_add_category_trainings($result, $EM_Event) {
-	global $blog_id;
+	global $current_user;
+	$user_roles = $current_user->roles;
+	$user_role = array_shift($user_roles);
 	if (is_admin()) {
-		if(current_user_can_for_blog($blog_id, 'trainings')){ 
+		if($user_role == "trainings"){ 
 			wp_set_object_terms($EM_Event->post_id, 'trainings', 'event-categories');
  		} 
 	}
@@ -105,11 +113,11 @@ add_filter('em_event_save', 'tm_add_category_trainings',10,2);
 
 function tm_add_trainings_contactmethods($contactmethods) {
 
-	$contactmethods['company'] = 'Company';
-	$contactmethods['companyurl'] = 'Company Website';	
-	$contactmethods['address'] = 'Address';
-	$contactmethods['zip'] = 'Zip Code';
-	$contactmethods['city'] = 'City';
+	$contactmethods['company'] = 'Company (trainings)';
+	$contactmethods['companyurl'] = 'Company Website (trainings)';	
+	$contactmethods['address'] = 'Address (trainings)';
+	$contactmethods['zip'] = 'Zip Code (trainings)';
+	$contactmethods['city'] = 'City (trainings)';
 
 	return $contactmethods;
 }
@@ -152,7 +160,7 @@ add_shortcode( 'tm_trainings_tags', 'tm_trainings_tags' );
 
 /* Add shortcode for training provider list */ 
 function tm_trainings_providers( $atts ){
-	$training_providers = get_users('role=trainings');
+	$training_providers = get_users('role=Trainings');
 	echo '<h2>Training providers</h2>';
 	foreach ($training_providers as $provider) {
 		echo '<p><a href="' . $provider->companyurl . '">' . $provider->company . '</a></p>';
