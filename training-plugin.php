@@ -58,7 +58,6 @@ add_role('trainings', 'Trainings', array(
 
 
 /* Make Trainings users see only their own Events in Admin */ 
-/* Doesn't work in Multisite? */
 
 function tm_posts_for_trainings_author($query) {
 global $user_ID;
@@ -127,7 +126,7 @@ add_filter('user_contactmethods','tm_add_trainings_contactmethods',10,1);
 
 function tm_trainings_post_author($content){
 	if (has_term( 'trainings', 'event-categories')) {
-		$content .= '<h2>Company</h2><p><a href="' . get_the_author_meta('companyurl') .  '">' .  get_the_author_meta('company') . '</a></p>';
+		$content .= '<h2>Company</h2><p><a href="' . get_the_author_meta('companyurl') .  '">' .  get_the_author_meta('company') . '</a></p><p><a href="' . the_author_posts_link() . '">Trainings by this company</a></p>';
 		$tags = get_the_terms($EM_Event->post_id, EM_TAXONOMY_TAG);
 		if( is_array($tags) && count($tags) > 0 ){
 			$content .= '<h2>Training tags</h2>';
@@ -151,7 +150,7 @@ function tm_trainings_tags( $atts ){
 	echo '<h2>Training tags</h2><p>';
 	foreach ( $tm_trainings_tags as $tm_trainings_tags ) {
 			if( ++$count > 60 ) break;  
-			echo $sep . '<a href="'.get_term_link($tm_trainings_tags).'">'.$tm_trainings_tags->name.'</a>';
+			echo $sep . '<a href="' . get_term_link($tm_trainings_tags) . '">' . $tm_trainings_tags->name . '</a>';
 			$sep = ', '; 
 		}
 	echo '</p>';
@@ -163,7 +162,7 @@ function tm_trainings_providers( $atts ){
 	$training_providers = get_users('role=Trainings');
 	echo '<h2>Training providers</h2>';
 	foreach ($training_providers as $provider) {
-		echo '<p><a href="' . $provider->companyurl . '">' . $provider->company . '</a></p>';
+		echo '<p><a href="' . the_author_posts_link() . '">' . $provider->company . '</a></p>';
 		}
 }
 add_shortcode('tm_trainings_providers', 'tm_trainings_providers' );
