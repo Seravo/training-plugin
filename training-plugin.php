@@ -162,7 +162,7 @@ function tm_trainings_providers(){
 	$training_providers = get_users('role=trainings');
 	echo '<h2>Training providers</h2>';
 	foreach ($training_providers as $provider) {
-		echo '<p><a href="' . $provider->companyurl . '">' . $provider->company . '</a></p>';
+		echo '<p><a href="' . get_author_posts_url($provider->ID) . '">' . $provider->company . '</a></p>';
 		}
 }
 add_shortcode('tm_trainings_providers', 'tm_trainings_providers' );
