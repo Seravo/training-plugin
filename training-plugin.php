@@ -167,6 +167,16 @@ function tm_trainings_providers(){
 }
 add_shortcode('tm_trainings_providers', 'tm_trainings_providers' );
 
+/* Trainings custom archive pages */
+/* Modify to show only on trainings role archives */
+function tm_trainings_author_archive($query)
+{
+    if ( $query->is_author )
+        $query->set( 'post_type', 'event' );
+    remove_action( 'pre_get_posts', 'tm_trainings_author_archive' );
+}
+add_action('pre_get_posts', 'tm_trainings_author_archive' );
+
 /* Add empty placeholder admin page */
 function tm_trainings_admin_page() {
 	echo "<h2>Placeholder</h2>";
