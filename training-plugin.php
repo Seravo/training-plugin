@@ -183,7 +183,7 @@ function tm_trainings_admin_page() {
 	echo "<p>...</p>";
 	}	
 function tm_trainings_admin() {
-	add_menu_page('html title','Trainings Plugin','manage_options','tm_trainings_plugin_admin',tm_trainings_admin_page);
+	add_menu_page('html title','Trainings Plugin','manage_options','tm_trainings_admin_page');
 }
 add_action('admin_menu','tm_trainings_admin');
 ?>
